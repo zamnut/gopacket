@@ -44,11 +44,19 @@ const (
 	RadioTapPresentRxFlags
 	RadioTapPresentTxFlags
 	RadioTapPresentRtsRetries
-	RadioTapPresentDataRetries
-	_
+	RadioTapPresentChannelPlus
 	RadioTapPresentMCS
 	RadioTapPresentAMPDUStatus
 	RadioTapPresentVHT
+	RadioTapPresentFrameTimestamp
+	RadioTapPresentHE
+	RadioTapPresentHEMU
+	_
+	RadioTapPresentPSDUZeroLength
+	RadioTapPresentLSig
+	RadioTapPresentTLVs
+	RadioTapPresentRadioTapNSNext
+	RadioTapPresentVendorNSNext
 	RadioTapPresentEXT RadioTapPresent = 1 << 31
 )
 
