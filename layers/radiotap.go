@@ -44,6 +44,7 @@ const (
 	RadioTapPresentRxFlags
 	RadioTapPresentTxFlags
 	RadioTapPresentRtsRetries
+	RadioTapPresentDataRetries
 	RadioTapPresentChannelPlus
 	RadioTapPresentMCS
 	RadioTapPresentAMPDUStatus
