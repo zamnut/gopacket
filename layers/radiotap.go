@@ -740,7 +740,7 @@ func (self RadioTapHEData1) ULDL() bool       { return self&RadioTapHEData1ULDLK
 func (self RadioTapHEData1) MCS() bool        { return self&RadioTapHEData1MCSKnown != 0 }
 func (self RadioTapHEData1) DCM() bool        { return self&RadioTapHEData1DCMKnown != 0 }
 func (self RadioTapHEData1) Coding() bool     { return self&RadioTapHEData1CodingKnown != 0 }
-func (self RadioTapHEData1) LDPCExtraOFDMSymbol() bool {
+func (self RadioTapHEData1) LDPCExtraSymbolsSegment() bool {
 	return self&RadioTapHEData1LDPCExtraSymbolSegmentKnown != 0
 }
 func (self RadioTapHEData1) STBC() bool          { return self&RadioTapHEData1STBCKnown != 0 }
