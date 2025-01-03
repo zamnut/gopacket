@@ -58,7 +58,7 @@ const (
 	RadioTapPresentTLVs
 	RadioTapPresentRadioTapNSNext
 	RadioTapPresentVendorNSNext
-	RadioTapPresentEXT RadioTapPresent = 1 << 31
+	RadioTapPresentEXT
 )
 
 func (r RadioTapPresent) TSFT() bool {
@@ -115,6 +115,9 @@ func (r RadioTapPresent) RtsRetries() bool {
 func (r RadioTapPresent) DataRetries() bool {
 	return r&RadioTapPresentDataRetries != 0
 }
+func (r RadioTapPresent) ChannelPlus() bool {
+	return r&RadioTapPresentChannelPlus != 0
+}
 func (r RadioTapPresent) MCS() bool {
 	return r&RadioTapPresentMCS != 0
 }
@@ -123,6 +126,27 @@ func (r RadioTapPresent) AMPDUStatus() bool {
 }
 func (r RadioTapPresent) VHT() bool {
 	return r&RadioTapPresentVHT != 0
+}
+func (r RadioTapPresent) FrameTimestamp() bool {
+	return r&RadioTapPresentFrameTimestamp != 0
+}
+func (r RadioTapPresent) HE() bool {
+	return r&RadioTapPresentHE != 0
+}
+func (r RadioTapPresent) HEMU() bool {
+	return r&RadioTapPresentHEMU != 0
+}
+func (r RadioTapPresent) PSDUZeroLength() bool {
+	return r&RadioTapPresentPSDUZeroLength != 0
+}
+func (r RadioTapPresent) LSig() bool {
+	return r&RadioTapPresentLSig != 0
+}
+func (r RadioTapPresent) TLVs() bool {
+	return r&RadioTapPresentTLVs != 0
+}
+func (r RadioTapPresent) RadioTapNSNext() bool {
+	return r&RadioTapPresentRadioTapNSNext != 0
 }
 func (r RadioTapPresent) EXT() bool {
 	return r&RadioTapPresentEXT != 0
@@ -682,6 +706,52 @@ func (self RadioTapVHTMCSNSS) Present() bool {
 func (self RadioTapVHTMCSNSS) String() string {
 	return fmt.Sprintf("NSS#%dMCS#%d", uint32(self&0xf), uint32(self>>4))
 }
+
+// t.head start here
+
+type RadioTapHE struct{}
+
+type RadioTapHEData1 uint16
+
+const (
+	RadioTapHEData1PPDUFormatMask              RadioTapHEData1 = 0x0003
+	RadioTapHEData1BSSColorKnown                               = 0x0004
+	RadioTapHEData1BeamChangeKnown                             = 0x0008
+	RadioTapHEData1ULDLKnown                                   = 0x0010
+	RadioTapHEData1MCSKnown                                    = 0x0020
+	RadioTapHEData1DCMKnown                                    = 0x0040
+	RadioTapHEData1CodingKnown                                 = 0x0080
+	RadioTapHEData1LDPCExtraSymbolSegmentKnown                 = 0x0100
+	RadioTapHEData1STBCKnown                                   = 0x0200
+	RadioTapHEData1SpatialReuseKnown                           = 0x0400
+	RadioTapHEData1SpatialReuse2Known                          = 0x0800
+	RadioTapHEData1SpatialReuse3Known                          = 0x1000
+	RadioTapHEData1SpatialReuse4Known                          = 0x2000
+	RadioTapHEData1BWRUAllocationKnown                         = 0x4000
+	RadioTapHEData1DopplerKnown                                = 0x8000
+)
+
+func (self RadioTapHEData1) PPDUFormat() int {
+	return int(self & RadioTapHEData1PPDUFormatMask)
+}
+func (self RadioTapHEData1) BSSColor() bool   { return self&RadioTapHEData1BSSColorKnown != 0 }
+func (self RadioTapHEData1) BeamChange() bool { return self&RadioTapHEData1BeamChangeKnown != 0 }
+func (self RadioTapHEData1) ULDL() bool       { return self&RadioTapHEData1ULDLKnown != 0 }
+func (self RadioTapHEData1) MCS() bool        { return self&RadioTapHEData1MCSKnown != 0 }
+func (self RadioTapHEData1) DCM() bool        { return self&RadioTapHEData1DCMKnown != 0 }
+func (self RadioTapHEData1) Coding() bool     { return self&RadioTapHEData1CodingKnown != 0 }
+func (self RadioTapHEData1) LDPCExtraOFDMSymbol() bool {
+	return self&RadioTapHEData1LDPCExtraSymbolSegmentKnown != 0
+}
+func (self RadioTapHEData1) STBC() bool          { return self&RadioTapHEData1STBCKnown != 0 }
+func (self RadioTapHEData1) SpatialReuse() bool  { return self&RadioTapHEData1SpatialReuseKnown != 0 }
+func (self RadioTapHEData1) SpatialReuse2() bool { return self&RadioTapHEData1SpatialReuse2Known != 0 }
+func (self RadioTapHEData1) SpatialReuse3() bool { return self&RadioTapHEData1SpatialReuse3Known != 0 }
+func (self RadioTapHEData1) SpatialReuse4() bool { return self&RadioTapHEData1SpatialReuse4Known != 0 }
+func (self RadioTapHEData1) BWRUAllocation() bool {
+	return self&RadioTapHEData1BWRUAllocationKnown != 0
+}
+func (self RadioTapHEData1) Doppler() bool { return self&RadioTapHEData1DopplerKnown != 0 }
 
 func decodeRadioTap(data []byte, p gopacket.PacketBuilder) error {
 	d := &RadioTap{}
