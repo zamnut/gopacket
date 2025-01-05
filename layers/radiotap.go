@@ -714,21 +714,21 @@ type RadioTapHE struct{}
 type RadioTapHEData1 uint16
 
 const (
-	RadioTapHEData1PPDUFormatMask              RadioTapHEData1 = 0x0003
-	RadioTapHEData1BSSColorKnown                               = 0x0004
-	RadioTapHEData1BeamChangeKnown                             = 0x0008
-	RadioTapHEData1ULDLKnown                                   = 0x0010
-	RadioTapHEData1MCSKnown                                    = 0x0020
-	RadioTapHEData1DCMKnown                                    = 0x0040
-	RadioTapHEData1CodingKnown                                 = 0x0080
-	RadioTapHEData1LDPCExtraSymbolSegmentKnown                 = 0x0100
-	RadioTapHEData1STBCKnown                                   = 0x0200
-	RadioTapHEData1SpatialReuseKnown                           = 0x0400
-	RadioTapHEData1SpatialReuse2Known                          = 0x0800
-	RadioTapHEData1SpatialReuse3Known                          = 0x1000
-	RadioTapHEData1SpatialReuse4Known                          = 0x2000
-	RadioTapHEData1BWRUAllocationKnown                         = 0x4000
-	RadioTapHEData1DopplerKnown                                = 0x8000
+	RadioTapHEData1PPDUFormatMask RadioTapHEData1 = 0x0003
+	RadioTapHEData1BSSColorKnown  RadioTapHEData1 = 2 << iota
+	RadioTapHEData1BeamChangeKnown
+	RadioTapHEData1ULDLKnown
+	RadioTapHEData1MCSKnown
+	RadioTapHEData1DCMKnown
+	RadioTapHEData1CodingKnown
+	RadioTapHEData1LDPCExtraSymbolKnown
+	RadioTapHEData1STBCKnown
+	RadioTapHEData1SpatialReuseKnown
+	RadioTapHEData1SpatialReuse2Known
+	RadioTapHEData1SpatialReuse3Known
+	RadioTapHEData1SpatialReuse4Known
+	RadioTapHEData1BWRUAllocationKnown
+	RadioTapHEData1DopplerKnown
 )
 
 func (self RadioTapHEData1) PPDUFormat() int {
@@ -740,8 +740,8 @@ func (self RadioTapHEData1) ULDL() bool       { return self&RadioTapHEData1ULDLK
 func (self RadioTapHEData1) MCS() bool        { return self&RadioTapHEData1MCSKnown != 0 }
 func (self RadioTapHEData1) DCM() bool        { return self&RadioTapHEData1DCMKnown != 0 }
 func (self RadioTapHEData1) Coding() bool     { return self&RadioTapHEData1CodingKnown != 0 }
-func (self RadioTapHEData1) LDPCExtraSymbolsSegment() bool {
-	return self&RadioTapHEData1LDPCExtraSymbolSegmentKnown != 0
+func (self RadioTapHEData1) LDPCExtraSymbol() bool {
+	return self&RadioTapHEData1LDPCExtraSymbolKnown != 0
 }
 func (self RadioTapHEData1) STBC() bool          { return self&RadioTapHEData1STBCKnown != 0 }
 func (self RadioTapHEData1) SpatialReuse() bool  { return self&RadioTapHEData1SpatialReuseKnown != 0 }
@@ -752,6 +752,82 @@ func (self RadioTapHEData1) BWRUAllocation() bool {
 	return self&RadioTapHEData1BWRUAllocationKnown != 0
 }
 func (self RadioTapHEData1) Doppler() bool { return self&RadioTapHEData1DopplerKnown != 0 }
+
+type RadioTapHEData2 uint16
+
+const (
+	RadioTapHEData2PriSec80MHzKnown RadioTapHEData2 = 1 << iota
+	RadioTapHEData2GIknown
+	RadioTapHEData2LTFSymbolsKnown
+	RadioTapHEData2PreFECPaddingFactorKnown
+	RadioTapHEData2TxBFKnown
+	RadioTapHEData2PEDisambiguityKnown
+	RadioTapHEData2TxOPKnown
+	RadioTapHEData2MidamblePeriodicityKnown
+	RadioTapHEData2RUAllocationOffsetMask  RadioTapHEData2 = 0x3f00
+	RadioTapHEData2RUAllocationOffsetKnown RadioTapHEData2 = 0x4000
+	RadioTapHEData2PriSec80MHz             RadioTapHEData2 = 0x8000
+)
+
+func (self RadioTapHEData2) PriSec80MHz() bool { return self&RadioTapHEData2PriSec80MHzKnown != 0 }
+func (self RadioTapHEData2) GI() bool          { return self&RadioTapHEData2GIknown != 0 }
+func (self RadioTapHEData2) LTFSymbols() bool  { return self&RadioTapHEData2LTFSymbolsKnown != 0 }
+func (self RadioTapHEData2) PreFECPaddingFactor() bool {
+	return self&RadioTapHEData2PreFECPaddingFactorKnown != 0
+}
+func (self RadioTapHEData2) TxBF() bool { return self&RadioTapHEData2TxBFKnown != 0 }
+func (self RadioTapHEData2) PEDisambiguity() bool {
+	return self&RadioTapHEData2PEDisambiguityKnown != 0
+}
+func (self RadioTapHEData2) TxOP() bool { return self&RadioTapHEData2TxOPKnown != 0 }
+func (self RadioTapHEData2) MidamblePeriodicity() bool {
+	return self&RadioTapHEData2MidamblePeriodicityKnown != 0
+}
+func (self RadioTapHEData2) RUAllocationOffsetValue() int {
+	return int(self & RadioTapHEData2RUAllocationOffsetMask >> 8) // TODO check this
+}
+func (self RadioTapHEData2) RUAllocationOffset() bool {
+	return self&RadioTapHEData2RUAllocationOffsetKnown != 0
+}
+func (self RadioTapHEData2) Secondary80MHz() bool { return self&RadioTapHEData2PriSec80MHz != 0 }
+
+type RadioTapHEData3 uint16
+
+const (
+	RadioTapHEData3BSSColorMask        RadioTapHEData3 = 0x003f
+	RadioTapHEData3BeamChangeMask      RadioTapHEData3 = 0x0040
+	RadioTapHEData3ULDLMask            RadioTapHEData3 = 0x0080
+	RadioTapHEData3MCSMask             RadioTapHEData3 = 0x0f00
+	RadioTapHEData3DCMMask             RadioTapHEData3 = 0x1000
+	RadioTapHEData3CodingMask          RadioTapHEData3 = 0x2000
+	RadioTapHEData3LDPCExtraSymbolMask RadioTapHEData3 = 0x4000
+	RadioTapHEData3STBCMask            RadioTapHEData3 = 0x8000
+)
+
+func (self RadioTapHEData3) BSSColor() int {
+	return int(self & RadioTapHEData3BSSColorMask)
+}
+// func (self RadioTapHEData3) BeamChange() bool { return self&RadioTapHEData3BeamChangeMask != 0 }
+// func (self RadioTapHEData3) ULDL() bool       { return self&RadioTapHEData3ULDLMask != 0 }
+func (self RadioTapHEData3) MCS() int {
+	return int(self & self & RadioTapHEData3MCSMask >> 8) // TODO check this
+}
+// func (self RadioTapHEData3) DCM() bool { return self&RadioTapHEData3DCMMask != 0 }
+func (self RadioTapHEData3) Coding() int {
+	return int(self & RadioTapHEData3CodingMask >> 14) // TODO check this
+}
+// func (self RadioTapHEData3) LDPCExtraSymbol() bool {
+// 	return self&RadioTapHEData3LDPCExtraSymbolMask != 0
+// }
+// func (self RadioTapHEData3) STBC() bool { return self&RadioTapHEData3STBCMask != 0 }
+
+type RadioTapHEData5 uint16
+
+const (
+	RadioTapHEData5BandwidthRUMask RadioTapHEData5 = 0x000f
+	RadioTapHEData5GI              RadioTapHEData5 = 0x0030
+	RadioTapHEData5LTFSymbolSize   RadioTapHEData5 = 0x00c0
+)
 
 func decodeRadioTap(data []byte, p gopacket.PacketBuilder) error {
 	d := &RadioTap{}
