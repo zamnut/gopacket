@@ -709,7 +709,18 @@ func (self RadioTapVHTMCSNSS) String() string {
 
 // t.head start here
 
-type RadioTapHE struct{}
+type RadioTapHE struct{
+	Data1 RadioTapHEData1
+	Data2 RadioTapHEData2
+	Data3 RadioTapHEData3
+	Data5 RadioTapHEData5
+	MCS uint8
+	BandwidthRU uint8
+	GI uint8
+	Streams uint8
+	TxOP uint8
+	DataRate int
+}
 
 type RadioTapHEData1 uint16
 
@@ -880,6 +891,7 @@ type RadioTap struct {
 	MCS         RadioTapMCS
 	AMPDUStatus RadioTapAMPDUStatus
 	VHT         RadioTapVHT
+	HE			RadioTapHE
 }
 
 func (m *RadioTap) LayerType() gopacket.LayerType { return LayerTypeRadioTap }
@@ -1018,6 +1030,9 @@ func (m *RadioTap) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) erro
 			PartialAID: binary.LittleEndian.Uint16(data[offset+10:]),
 		}
 		offset += 12
+	}
+	if m.Present.HE() {
+		
 	}
 
 	payload := data[m.Length:]
