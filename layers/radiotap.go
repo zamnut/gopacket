@@ -714,12 +714,6 @@ type RadioTapHE struct{
 	Data2 RadioTapHEData2
 	Data3 RadioTapHEData3
 	Data5 RadioTapHEData5
-	MCS uint8
-	BandwidthRU uint8
-	GI uint8
-	Streams uint8
-	TxOP uint8
-	DataRate int
 }
 
 type RadioTapHEData1 uint16
@@ -777,7 +771,7 @@ const (
 	RadioTapHEData2MidamblePeriodicityKnown
 	RadioTapHEData2RUAllocationOffsetMask  RadioTapHEData2 = 0x3f00
 	RadioTapHEData2RUAllocationOffsetKnown RadioTapHEData2 = 0x4000
-	RadioTapHEData2PriSec80MHz             RadioTapHEData2 = 0x8000
+	RadioTapHEData2PriSec80MHzMask         RadioTapHEData2 = 0x8000
 )
 
 func (self RadioTapHEData2) PriSec80MHz() bool { return self&RadioTapHEData2PriSec80MHzKnown != 0 }
@@ -800,7 +794,7 @@ func (self RadioTapHEData2) RUAllocationOffsetValue() int {
 func (self RadioTapHEData2) RUAllocationOffset() bool {
 	return self&RadioTapHEData2RUAllocationOffsetKnown != 0
 }
-func (self RadioTapHEData2) Secondary80MHz() bool { return self&RadioTapHEData2PriSec80MHz != 0 }
+func (self RadioTapHEData2) Secondary80MHz() int { return int((self&RadioTapHEData2PriSec80MHzMask)>>15) }
 
 type RadioTapHEData3 uint16
 
@@ -1031,8 +1025,19 @@ func (m *RadioTap) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) erro
 		}
 		offset += 12
 	}
+	if m.Present.FrameTimestamp() {
+		offset += align(offset, 8)
+		offset += 12
+	}
 	if m.Present.HE() {
-		
+		offset += align(offset, 2)
+		m.HE = RadioTapHE{
+			Data1: RadioTapHEData1(binary.LittleEndian.Uint16(data[offset:])),
+			Data2: RadioTapHEData2(binary.LittleEndian.Uint16(data[offset+2:])),
+			Data3: RadioTapHEData3(binary.LittleEndian.Uint16(data[offset+4:])),
+			Data5: RadioTapHEData5(binary.LittleEndian.Uint16(data[offset+8:])),
+		}
+		offset += 12
 	}
 
 	payload := data[m.Length:]
