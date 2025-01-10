@@ -709,7 +709,7 @@ func (self RadioTapVHTMCSNSS) String() string {
 
 // t.head start here
 
-type RadioTapHE struct{
+type RadioTapHE struct {
 	Data1 RadioTapHEData1
 	Data2 RadioTapHEData2
 	Data3 RadioTapHEData3
@@ -794,7 +794,9 @@ func (self RadioTapHEData2) RUAllocationOffsetValue() int {
 func (self RadioTapHEData2) RUAllocationOffset() bool {
 	return self&RadioTapHEData2RUAllocationOffsetKnown != 0
 }
-func (self RadioTapHEData2) Secondary80MHz() int { return int((self&RadioTapHEData2PriSec80MHzMask)>>15) }
+func (self RadioTapHEData2) Secondary80MHz() int {
+	return int((self & RadioTapHEData2PriSec80MHzMask) >> 15)
+}
 
 type RadioTapHEData3 uint16
 
@@ -812,27 +814,77 @@ const (
 func (self RadioTapHEData3) BSSColor() int {
 	return int(self & RadioTapHEData3BSSColorMask)
 }
-// func (self RadioTapHEData3) BeamChange() bool { return self&RadioTapHEData3BeamChangeMask != 0 }
-// func (self RadioTapHEData3) ULDL() bool       { return self&RadioTapHEData3ULDLMask != 0 }
+func (self RadioTapHEData3) BeamChange() bool { return self&RadioTapHEData3BeamChangeMask != 0 }
+func (self RadioTapHEData3) ULDL() bool       { return self&RadioTapHEData3ULDLMask != 0 }
 func (self RadioTapHEData3) MCS() int {
 	return int(self & self & RadioTapHEData3MCSMask >> 8) // TODO check this
 }
-// func (self RadioTapHEData3) DCM() bool { return self&RadioTapHEData3DCMMask != 0 }
+func (self RadioTapHEData3) DCM() bool { return self&RadioTapHEData3DCMMask != 0 }
 func (self RadioTapHEData3) Coding() int {
 	return int(self & RadioTapHEData3CodingMask >> 14) // TODO check this
 }
-// func (self RadioTapHEData3) LDPCExtraSymbol() bool {
-// 	return self&RadioTapHEData3LDPCExtraSymbolMask != 0
-// }
-// func (self RadioTapHEData3) STBC() bool { return self&RadioTapHEData3STBCMask != 0 }
+func (self RadioTapHEData3) LDPCExtraSymbol() bool {
+	return self&RadioTapHEData3LDPCExtraSymbolMask != 0
+}
+func (self RadioTapHEData3) STBC() bool { return self&RadioTapHEData3STBCMask != 0 }
 
 type RadioTapHEData5 uint16
 
 const (
-	RadioTapHEData5BandwidthRUMask RadioTapHEData5 = 0x000f
-	RadioTapHEData5GI              RadioTapHEData5 = 0x0030
-	RadioTapHEData5LTFSymbolSize   RadioTapHEData5 = 0x00c0
+	RadioTapHEData5BandwidthRUMask         RadioTapHEData5 = 0x000f
+	RadioTapHEData5GIMask                  RadioTapHEData5 = 0x0030
+	RadioTapHEData5LTFSymbolSizeMask       RadioTapHEData5 = 0x00c0
+	RadioTapHEData5LTFSymbolsMask          RadioTapHEData5 = 0x0700
+	RadioTapHEData5PreFECPaddingFactorMask RadioTapHEData5 = 0x3000
+	RadioTapHEData5TxBFMask                RadioTapHEData5 = 0x4000
+	RadioTapHEData5DisambiguityMask        RadioTapHEData5 = 0x8000
 )
+
+func (self RadioTapHEData5) Bandwidth() int {
+	return int(self & RadioTapHEData5BandwidthRUMask)
+}
+func (self RadioTapHEData5) GI() int {
+	return int(self & RadioTapHEData5GIMask >> 4)
+}
+func (self RadioTapHEData5) LTFSymbolSize() int {
+	return int(self & RadioTapHEData5LTFSymbolSizeMask >> 6)
+}
+func (self RadioTapHEData5) LTFSymbols() int {
+	return int(self & RadioTapHEData5LTFSymbolsMask >> 8)
+}
+func (self RadioTapHEData5) PreFECPaddingFactor() int {
+	return int(self & RadioTapHEData5PreFECPaddingFactorMask >> 12)
+}
+func (self RadioTapHEData5) TxBF() int {
+	return int(self & RadioTapHEData5TxBFMask >> 14)
+}
+func (self RadioTapHEData5) Disambiguity() int {
+	return int(self & RadioTapHEData5DisambiguityMask >> 15)
+}
+
+
+type RadioTapHEData6 uint16
+
+const (
+	RadioTapHEData6NSTSMask RadioTapHEData6 = 0x000f
+	RadioTapHEData6DopplerMask RadioTapHEData6 = 0x0010
+	RadioTapHEData6TxOPMask RadioTapHEData6 = 0x7f00
+	RadioTapHEData6MidAmblePeriodicityMask RadioTapHEData6 = 0x8000
+)
+
+func (self RadioTapHEData6) NSTS() int {
+	return int(self & RadioTapHEData6NSTSMask)
+}
+func (self RadioTapHEData6) Doppler() int {
+	return int(self & RadioTapHEData6DopplerMask >> 4)
+}
+func (self RadioTapHEData6) TxOP() int {
+	return int(self & RadioTapHEData6TxOPMask >> 8)
+}
+func (self RadioTapHEData6) MidamblePeriodicity() int {
+	return int(self & RadioTapHEData6MidAmblePeriodicityMask >> 15)
+}
+
 
 func decodeRadioTap(data []byte, p gopacket.PacketBuilder) error {
 	d := &RadioTap{}
@@ -885,7 +937,7 @@ type RadioTap struct {
 	MCS         RadioTapMCS
 	AMPDUStatus RadioTapAMPDUStatus
 	VHT         RadioTapVHT
-	HE			RadioTapHE
+	HE          RadioTapHE
 }
 
 func (m *RadioTap) LayerType() gopacket.LayerType { return LayerTypeRadioTap }
