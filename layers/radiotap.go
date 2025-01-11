@@ -801,15 +801,15 @@ func (self RadioTapHEData2) Secondary80MHz() int {
 type RadioTapHEData3 uint16
 
 const (
-	_ = iota
+	_                                                  = iota
 	RadioTapHEData3BSSColorMask        RadioTapHEData3 = 0x003f
-	RadioTapHEData3BeamChangeMask       = 0x0040
-	RadioTapHEData3ULDLMask             = 0x0080
-	RadioTapHEData3MCSMask              = 0x0f00
-	RadioTapHEData3DCMMask              = 0x1000
-	RadioTapHEData3CodingMask           = 0x2000
-	RadioTapHEData3LDPCExtraSymbolMask  = 0x4000
-	RadioTapHEData3STBCMask             = 0x8000
+	RadioTapHEData3BeamChangeMask                      = 0x0040
+	RadioTapHEData3ULDLMask                            = 0x0080
+	RadioTapHEData3MCSMask                             = 0x0f00
+	RadioTapHEData3DCMMask                             = 0x1000
+	RadioTapHEData3CodingMask                          = 0x2000
+	RadioTapHEData3LDPCExtraSymbolMask                 = 0x4000
+	RadioTapHEData3STBCMask                            = 0x8000
 )
 
 func (self RadioTapHEData3) BSSColor() int {
@@ -832,13 +832,14 @@ func (self RadioTapHEData3) STBC() bool { return self&RadioTapHEData3STBCMask !=
 type RadioTapHEData5 uint16
 
 const (
+	_                                                      = iota
 	RadioTapHEData5BandwidthRUMask         RadioTapHEData5 = 0x000f
-	RadioTapHEData5GIMask                  RadioTapHEData5 = 0x0030
-	RadioTapHEData5LTFSymbolSizeMask       RadioTapHEData5 = 0x00c0
-	RadioTapHEData5LTFSymbolsMask          RadioTapHEData5 = 0x0700
-	RadioTapHEData5PreFECPaddingFactorMask RadioTapHEData5 = 0x3000
-	RadioTapHEData5TxBFMask                RadioTapHEData5 = 0x4000
-	RadioTapHEData5DisambiguityMask        RadioTapHEData5 = 0x8000
+	RadioTapHEData5GIMask                                  = 0x0030
+	RadioTapHEData5LTFSymbolSizeMask                       = 0x00c0
+	RadioTapHEData5LTFSymbolsMask                          = 0x0700
+	RadioTapHEData5PreFECPaddingFactorMask                 = 0x3000
+	RadioTapHEData5TxBFMask                                = 0x4000
+	RadioTapHEData5DisambiguityMask                        = 0x8000
 )
 
 func (self RadioTapHEData5) Bandwidth() int {
@@ -866,10 +867,11 @@ func (self RadioTapHEData5) Disambiguity() int {
 type RadioTapHEData6 uint16
 
 const (
+	_                                                      = iota
 	RadioTapHEData6NSTSMask                RadioTapHEData6 = 0x000f
-	RadioTapHEData6DopplerMask             RadioTapHEData6 = 0x0010
-	RadioTapHEData6TxOPMask                RadioTapHEData6 = 0x7f00
-	RadioTapHEData6MidAmblePeriodicityMask RadioTapHEData6 = 0x8000
+	RadioTapHEData6DopplerMask                             = 0x0010
+	RadioTapHEData6TxOPMask                                = 0x7f00
+	RadioTapHEData6MidAmblePeriodicityMask                 = 0x8000
 )
 
 func (self RadioTapHEData6) NSTS() int {
