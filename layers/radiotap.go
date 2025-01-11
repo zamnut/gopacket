@@ -769,9 +769,9 @@ const (
 	RadioTapHEData2PEDisambiguityKnown
 	RadioTapHEData2TxOPKnown
 	RadioTapHEData2MidamblePeriodicityKnown
-	RadioTapHEData2RUAllocationOffsetMask  RadioTapHEData2 = 0x3f00
-	RadioTapHEData2RUAllocationOffsetKnown RadioTapHEData2 = 0x4000
-	RadioTapHEData2PriSec80MHzMask         RadioTapHEData2 = 0x8000
+	RadioTapHEData2RUAllocationOffsetMask  = 0x3f00
+	RadioTapHEData2RUAllocationOffsetKnown = 0x4000
+	RadioTapHEData2PriSec80MHzMask         = 0x8000
 )
 
 func (self RadioTapHEData2) PriSec80MHz() bool { return self&RadioTapHEData2PriSec80MHzKnown != 0 }
@@ -801,14 +801,15 @@ func (self RadioTapHEData2) Secondary80MHz() int {
 type RadioTapHEData3 uint16
 
 const (
+	_ = iota
 	RadioTapHEData3BSSColorMask        RadioTapHEData3 = 0x003f
-	RadioTapHEData3BeamChangeMask      RadioTapHEData3 = 0x0040
-	RadioTapHEData3ULDLMask            RadioTapHEData3 = 0x0080
-	RadioTapHEData3MCSMask             RadioTapHEData3 = 0x0f00
-	RadioTapHEData3DCMMask             RadioTapHEData3 = 0x1000
-	RadioTapHEData3CodingMask          RadioTapHEData3 = 0x2000
-	RadioTapHEData3LDPCExtraSymbolMask RadioTapHEData3 = 0x4000
-	RadioTapHEData3STBCMask            RadioTapHEData3 = 0x8000
+	RadioTapHEData3BeamChangeMask       = 0x0040
+	RadioTapHEData3ULDLMask             = 0x0080
+	RadioTapHEData3MCSMask              = 0x0f00
+	RadioTapHEData3DCMMask              = 0x1000
+	RadioTapHEData3CodingMask           = 0x2000
+	RadioTapHEData3LDPCExtraSymbolMask  = 0x4000
+	RadioTapHEData3STBCMask             = 0x8000
 )
 
 func (self RadioTapHEData3) BSSColor() int {
@@ -862,13 +863,12 @@ func (self RadioTapHEData5) Disambiguity() int {
 	return int(self & RadioTapHEData5DisambiguityMask >> 15)
 }
 
-
 type RadioTapHEData6 uint16
 
 const (
-	RadioTapHEData6NSTSMask RadioTapHEData6 = 0x000f
-	RadioTapHEData6DopplerMask RadioTapHEData6 = 0x0010
-	RadioTapHEData6TxOPMask RadioTapHEData6 = 0x7f00
+	RadioTapHEData6NSTSMask                RadioTapHEData6 = 0x000f
+	RadioTapHEData6DopplerMask             RadioTapHEData6 = 0x0010
+	RadioTapHEData6TxOPMask                RadioTapHEData6 = 0x7f00
 	RadioTapHEData6MidAmblePeriodicityMask RadioTapHEData6 = 0x8000
 )
 
@@ -884,7 +884,6 @@ func (self RadioTapHEData6) TxOP() int {
 func (self RadioTapHEData6) MidamblePeriodicity() int {
 	return int(self & RadioTapHEData6MidAmblePeriodicityMask >> 15)
 }
-
 
 func decodeRadioTap(data []byte, p gopacket.PacketBuilder) error {
 	d := &RadioTap{}
