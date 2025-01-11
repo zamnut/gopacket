@@ -1090,6 +1090,7 @@ func (m *RadioTap) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) erro
 			Data2: RadioTapHEData2(binary.LittleEndian.Uint16(data[offset+2:])),
 			Data3: RadioTapHEData3(binary.LittleEndian.Uint16(data[offset+4:])),
 			Data5: RadioTapHEData5(binary.LittleEndian.Uint16(data[offset+8:])),
+			Data6: RadioTapHEData6(binary.LittleEndian.Uint16(data[offset+12:])),
 		}
 		offset += 12
 	}
