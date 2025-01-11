@@ -714,6 +714,7 @@ type RadioTapHE struct {
 	Data2 RadioTapHEData2
 	Data3 RadioTapHEData3
 	Data5 RadioTapHEData5
+	Data6 RadioTapHEData6
 }
 
 type RadioTapHEData1 uint16
